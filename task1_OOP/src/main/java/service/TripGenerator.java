@@ -37,6 +37,7 @@ public class TripGenerator {
         LocalDateTime end = LocalDateTime.of(baseDate, endTime);
 
         List<Trip> trips = new ArrayList<>();
+
         while (!current.isAfter(end)) {
             trips.add(new Trip(route, current.toLocalTime(), dayType));
             current = current.plus(interval);

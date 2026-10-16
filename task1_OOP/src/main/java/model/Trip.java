@@ -50,8 +50,4 @@ public class Trip {
         var departureDateTime = LocalDateTime.of(departureDate, departureTime);
         return departureDateTime.plus(route.getDurationToStop(stopIndex));
     }
-
-    public boolean passesThrough(Stop targetStop) {
-        return route.containsStop(targetStop);
-    }
 }

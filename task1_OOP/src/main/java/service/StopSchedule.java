@@ -5,10 +5,7 @@ import model.DayType;
 import model.Stop;
 import model.Trip;
 
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -67,25 +64,17 @@ public class StopSchedule {
         for (Trip trip : allTrips) {
             List<Integer> indexes = trip.getRoute().indexesOfStop(stop);
             for (int index : indexes) {
-                Duration durationToStop = trip.getRoute().getDurationToStop(index);
-                long daysBefore = durationToStop.toDays() + 1;
+                LocalDateTime expectedArrivalTime = LocalDateTime.of(date, trip.getArrivalTimeAt(index));
+                Duration duration = trip.getRoute().getDurationToStop(index);
+                LocalDateTime departureDateTime = expectedArrivalTime.minus(duration);
+                LocalDate tripDate = departureDateTime.toLocalDate();
+                LocalDateTime arrivalDateTime = trip.getArrivalDateTimeAt(tripDate, index);
 
-                for (long days = 0; days <= daysBefore; days++) {
-                    LocalDate tripDate = date.minusDays(days);
-
-                    if (trip.getDayType() != getDayType(tripDate)) {
-                        continue;
-                    }
-
-                    LocalDateTime arrivalDateTime = trip.getArrivalDateTimeAt(tripDate, index);
-
-                    if (!arrivalDateTime.toLocalDate().equals(date)) {
-                        continue;
-                    }
-
-                    LocalDateTime departureDateTime = LocalDateTime.of(tripDate, trip.getDepartureTime());
-                    schedule.add(new StopScheduleDateEntry(trip, index, departureDateTime, arrivalDateTime));
+                if (trip.getDayType() != getDayType(tripDate)) {
+                    continue;
                 }
+
+                schedule.add(new StopScheduleDateEntry(trip, index, departureDateTime, arrivalDateTime));
             }
         }
 
