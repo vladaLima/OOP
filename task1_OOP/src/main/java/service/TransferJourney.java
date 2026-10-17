@@ -6,7 +6,27 @@ import model.Trip;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+/**
+ * Рассчитанная поездка с одной пересадкой, выбранными рейсами и полным временем в пути.
+ *
+ * @param firstTrip первый рейс
+ * @param secondTrip второй рейс
+ * @param transferStop остановка пересадки
+ * @param boardingIndex индекс посадки на первый рейс
+ * @param firstTransferIndex индекс остановки пересадки на маршруте первого рейса
+ * @param secondTransferIndex индекс остановки пересадки на маршруте второго рейса
+ * @param destinationIndex индекс конечной остановки второго рейса
+ * @param waitingTime продолжительность ожидания пересадки
+ * @param totalDuration полная продолжительность поездки, включая ожидание
+ * @param departureDateTime дата и время начала поездки с остановки посадки
+ * @param arrivalDateTime дата и время прибытия в пункт назначения
+ */
 public record TransferJourney(Trip firstTrip, Trip secondTrip, Stop transferStop, int boardingIndex, int firstTransferIndex, int secondTransferIndex, int destinationIndex, Duration waitingTime, Duration totalDuration, LocalDateTime departureDateTime, LocalDateTime arrivalDateTime) {
+    /**
+     * Проверяет согласованность рейсов, остановок, индексов, длительностей и дат поездки.
+     *
+     * @throws IllegalArgumentException если данные поездки противоречивы или некорректны
+     */
     public TransferJourney {
         if (firstTrip == null || secondTrip == null) {
             throw new IllegalArgumentException("Trips cannot be null");

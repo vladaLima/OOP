@@ -4,7 +4,19 @@ import model.Trip;
 
 import java.time.LocalTime;
 
+/**
+ * Запись расписания: рейс, индекс остановки и время прибытия.
+ *
+ * @param trip рейс
+ * @param stopIndex индекс остановки в маршруте рейса
+ * @param arrivalTime время прибытия без календарной даты
+ */
 public record StopScheduleEntry(Trip trip, int stopIndex, LocalTime arrivalTime) {
+    /**
+     * Проверяет корректность рейса, индекса остановки и времени прибытия.
+     *
+     * @throws IllegalArgumentException если данные записи некорректны
+     */
     public StopScheduleEntry {
         if (trip == null) {
             throw new IllegalArgumentException("Trip cannot be null");

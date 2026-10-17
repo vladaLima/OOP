@@ -4,7 +4,21 @@ import model.Trip;
 
 import java.time.LocalDateTime;
 
+/**
+ * Запись расписания с датами и временем отправления и прибытия.
+ *
+ * @param trip рейс
+ * @param stopIndex индекс остановки в маршруте
+ * @param departureDateTime дата и время отправления рейса с первой остановки
+ * @param arrivalDateTime дата и время прибытия на указанную остановку
+ */
 public record StopScheduleDateEntry(Trip trip, int stopIndex, LocalDateTime departureDateTime, LocalDateTime arrivalDateTime) {
+    /**
+     * Проверяет рейс, индекс и хронологический порядок времени отправления и прибытия.
+     *
+     * @throws IllegalArgumentException если рейс или время некорректны либо прибытие раньше отправления
+     * @throws IndexOutOfBoundsException если индекс остановки вне границ маршрута
+     */
     public StopScheduleDateEntry {
         if (trip == null) {
             throw new IllegalArgumentException("Trip cannot be null");

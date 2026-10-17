@@ -10,10 +10,20 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Расписание прибытия рейсов на конкретную остановку.
+ */
 public class StopSchedule {
     private final Stop stop;
     private final List<Trip> allTrips;
 
+    /**
+     * Создаёт расписание остановки на основе списка рейсов.
+     *
+     * @param stop остановка, для которой составляется расписание
+     * @param allTrips список доступных рейсов
+     * @throws IllegalArgumentException если остановка или список равны null
+     */
     public StopSchedule(Stop stop, List<Trip> allTrips) {
         if (stop == null) {
             throw new IllegalArgumentException("Stop cannot be null");
@@ -26,6 +36,14 @@ public class StopSchedule {
         this.allTrips = List.copyOf(allTrips);
     }
 
+    /**
+     * Формирует отсортированное по времени расписание остановки для типа дня.
+     *
+     * @param dayType будний или выходной день
+     * @return неизменяемый список записей расписания
+     * @throws ScheduleNotFoundException если подходящих рейсов нет
+     * @throws IllegalArgumentException если тип дня равен null
+     */
     public List<StopScheduleEntry> getScheduleEntries(DayType dayType) throws ScheduleNotFoundException {
         if (dayType == null) {
             throw new IllegalArgumentException("Day cannot be null");
@@ -54,6 +72,14 @@ public class StopSchedule {
         return List.copyOf(schedule);
     }
 
+    /**
+     * Формирует расписание на календарную дату с учётом типа дня отправления каждого рейса.
+     *
+     * @param date дата, на которую составляется расписание прибытия
+     * @return неизменяемый список записей с датами и временем
+     * @throws ScheduleNotFoundException если расписание пусто
+     * @throws IllegalArgumentException если дата равна null
+     */
     public List<StopScheduleDateEntry> getScheduleDateEntries(LocalDate date) throws ScheduleNotFoundException {
         if (date == null) {
             throw new IllegalArgumentException("Arrival date cannot be null");

@@ -11,7 +11,20 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Генератор рейсов маршрута по заданному временному диапазону и интервалу.
+ */
 public class TripGenerator {
+    /**
+     * Создаёт рейсы от начального до конечного времени включительно с шагом интервала маршрута.
+     *
+     * @param route маршрут, для которого создаются рейсы
+     * @param startTime время, с которого могут отправляться рейсы
+     * @param endTime предельное время отправления, включительно
+     * @param dayType тип дня создаваемых рейсов
+     * @return неизменяемый список сгенерированных рейсов
+     * @throws IllegalArgumentException если аргументы некорректны или конец диапазона раньше начала
+     */
     public List<Trip> generateTrips(Route route, LocalTime startTime, LocalTime endTime, DayType dayType) {
         if (route == null) {
             throw new IllegalArgumentException("Route cannot be null");

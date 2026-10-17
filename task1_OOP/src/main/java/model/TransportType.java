@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Виды городского транспорта с характеристиками скорости и вместимости.
+ */
 public enum TransportType {
     BUS(25, 80),
     TROLLEYBUS(20, 90),
@@ -17,14 +20,29 @@ public enum TransportType {
         this.capacity = capacity;
     }
 
+    /**
+     * Возвращает среднюю скорость данного вида транспорта.
+     *
+     * @return средняя скорость в километрах в час
+     */
     public int getAvgSpeedKmh() {
         return avgSpeedKmh;
     }
 
+    /**
+     * Возвращает вместимость транспорта.
+     *
+     * @return количество пассажиров
+     */
     public int getCapacity() {
         return capacity;
     }
 
+    /**
+     * Возвращает название вида транспорта на русском.
+     *
+     * @return название транспорта
+     */
     public String getTransportType() {
         return switch (this) {
             case BUS -> "автобус";

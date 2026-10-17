@@ -10,10 +10,20 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Поиск маршрутов и рейсов с одной пересадкой с учётом расписания и времени ожидания.
+ */
 public class TransferPathFinder implements PathFinder {
     private final List<Trip> trips;
     private final List<Route> routes;
 
+    /**
+     * Создаёт поисковик пересадок по рейсам и маршрутам.
+     *
+     * @param trips список доступных рейсов
+     * @param routes список маршрутов
+     * @throws IllegalArgumentException если входные списки некорректны
+     */
     public TransferPathFinder(List<Trip> trips, List<Route> routes) {
         if (trips == null) {
             throw new IllegalArgumentException("Trips cannot be null");
@@ -26,6 +36,14 @@ public class TransferPathFinder implements PathFinder {
         this.routes = List.copyOf(routes);
     }
 
+    /**
+     * Находит все уникальные маршруты, участвующие в вариантах поездки с одной пересадкой.
+     *
+     * @param from начальная остановка
+     * @param to конечная остановка
+     * @return список отдельных маршрутов, а не пар пересадок
+     * @throws TransportException если вариантов с пересадкой нет
+     */
     @Override
     public List<Route> findRoutes(Stop from, Stop to) throws TransportException {
         List<TransferRouteOption> options = findTransferOptions(from, to);
@@ -44,6 +62,14 @@ public class TransferPathFinder implements PathFinder {
         return List.copyOf(uniqueRoutes);
     }
 
+    /**
+     * Находит возможные пары маршрутов и общие остановки для одной пересадки с учётом направления движения.
+     *
+     * @param from начальная остановка
+     * @param to конечная остановка
+     * @return список вариантов пересадки; может быть пустым
+     * @throws IllegalArgumentException если остановки некорректны
+     */
     public List<TransferRouteOption> findTransferOptions(Stop from, Stop to) throws TransportException {
         if (from == null || to == null) {
             throw new IllegalArgumentException("Stops cannot be null");
@@ -79,6 +105,17 @@ public class TransferPathFinder implements PathFinder {
         return options;
     }
 
+    /**
+     * Подбирает поездку с одной пересадкой и минимальной общей длительностью, включая ожидание. Учитывает тип дня рейсов и при необходимости переносит второй рейс на следующую подходящую дату.
+     *
+     * @param from остановка отправления
+     * @param to остановка назначения
+     * @param travelDate дата посадки на первый рейс
+     * @param minTransferTime минимально допустимое время пересадки
+     * @return поездка с наименьшей общей продолжительностью среди найденных
+     * @throws TransportException если подходящая поездка не найдена
+     * @throws IllegalArgumentException если аргументы некорректны
+     */
     public TransferJourney findBestJourney(Stop from, Stop to, LocalDate travelDate, Duration minTransferTime) throws TransportException {
         if (from == null || to == null) {
             throw new IllegalArgumentException("Stops cannot be null");
