@@ -121,7 +121,7 @@ public class TransferPathFinderTest {
         Trip trip1 = new Trip(firstRoute, LocalTime.of(23, 50), DayType.WEEKDAY);
         Trip trip2 = new Trip(secondRoute, LocalTime.of(0, 5), DayType.WEEKEND);
         TransferPathFinder finder = new TransferPathFinder(List.of(trip1, trip2), List.of(firstRoute, secondRoute));
-        TransferJourney journey = finder.findBestJourney(station, school, LocalDate.of(2026, 10, 16), Duration.ofMinutes(5));
+        TransferJourney journey = finder.findBestJourney(station, school, LocalDate.of(2026, 10, 16), Duration.ofMinutes(0));
 
         assertEquals(LocalDateTime.of(2026, 10, 16, 0, 0), journey.departureDateTime());
         assertEquals(LocalDateTime.of(2026, 10, 17, 0, 30), journey.arrivalDateTime());
@@ -196,6 +196,88 @@ public class TransferPathFinderTest {
 
         assertEquals(LocalDateTime.of(2026, 10, 16, 8, 20), best.departureDateTime());
         assertEquals(LocalDateTime.of(2026, 10, 16, 8, 50), best.arrivalDateTime());
+    }
+
+    @Test
+    @DisplayName("Кольцевой маршрут: пересадка на повторной остановке park после посадки" +
+            "Алгоритм выбирает второе вхождение остановки park, на которую рейс приходит в 8.20, т.к. в первый раз рейс приходит в парк в 8.00" +
+            "А это раньше, чем рейс придет на остановку посадки")
+    void shouldFindTransferAtRepeatedStopOnCircularRoute() throws TransportException {
+        Route circularRoute = new Route(
+                10,
+                "Кольцевой маршрут",
+                TransportType.BUS,
+                List.of(
+                        new RouteSegment(park, Duration.ofMinutes(10)),
+                        new RouteSegment(station, Duration.ofMinutes(5)),
+                        new RouteSegment(museum, Duration.ofMinutes(5)),
+                        new RouteSegment(park, Duration.ZERO)
+                ),
+                Duration.ofMinutes(10)
+        );
+
+        Route secondRoute = createRoute(20, park, circus, school, 15, 10);
+        Trip firstTrip = new Trip(circularRoute, LocalTime.of(8, 0), DayType.WEEKDAY);
+        Trip secondTrip = new Trip(secondRoute, LocalTime.of(8, 25), DayType.WEEKDAY);
+        TransferPathFinder finder = new TransferPathFinder(List.of(firstTrip, secondTrip), List.of(circularRoute, secondRoute));
+        TransferJourney journey = finder.findBestJourney(station, school, LocalDate.of(2026, 10, 16), Duration.ofMinutes(5));
+
+        assertEquals(firstTrip, journey.firstTrip());
+        assertEquals(secondTrip, journey.secondTrip());
+
+        assertEquals(1, journey.boardingIndex());
+        assertEquals(3, journey.firstTransferIndex());
+        assertEquals(0, journey.secondTransferIndex());
+
+        assertEquals(park, journey.transferStop());
+
+        assertEquals(Duration.ofMinutes(5), journey.waitingTime());
+        assertEquals(Duration.ofMinutes(40), journey.totalDuration());
+
+        assertEquals(LocalDateTime.of(2026, 10, 16, 8, 10), journey.departureDateTime());
+        assertEquals(LocalDateTime.of(2026, 10, 16, 8, 50), journey.arrivalDateTime());
+    }
+
+    @Test
+    @DisplayName("Кольцевой маршрут: выбирается пересадка с минимальной общей длительностью")
+    void shouldChooseBestTransferAtRepeatedStop()
+            throws TransportException {
+
+        Route circularRoute = new Route(
+                10,
+                "Кольцевой маршрут",
+                TransportType.BUS,
+                List.of(
+                        new RouteSegment(station, Duration.ofMinutes(10)),
+                        new RouteSegment(park, Duration.ofMinutes(5)),
+                        new RouteSegment(museum, Duration.ofMinutes(5)),
+                        new RouteSegment(park, Duration.ofMinutes(10)),
+                        new RouteSegment(station, Duration.ZERO)
+                ),
+                Duration.ofMinutes(10)
+        );
+
+        Route secondRoute = createRoute(20, park, circus, school, 15, 10);
+        Trip firstTrip = new Trip(circularRoute, LocalTime.of(8, 0), DayType.WEEKDAY);
+        Trip earlySecondTrip = new Trip(secondRoute, LocalTime.of(8, 15), DayType.WEEKDAY);
+        Trip laterSecondTrip = new Trip(secondRoute, LocalTime.of(8, 25), DayType.WEEKDAY);
+        TransferPathFinder finder = new TransferPathFinder(List.of(firstTrip, earlySecondTrip, laterSecondTrip), List.of(circularRoute, secondRoute));
+        TransferJourney journey = finder.findBestJourney(station, school, LocalDate.of(2026, 10, 16), Duration.ofMinutes(5));
+
+        assertEquals(firstTrip, journey.firstTrip());
+        assertEquals(earlySecondTrip, journey.secondTrip());
+
+        assertEquals(0, journey.boardingIndex());
+        assertEquals(1, journey.firstTransferIndex());
+        assertEquals(0, journey.secondTransferIndex());
+
+        assertEquals(park, journey.transferStop());
+
+        assertEquals(Duration.ofMinutes(5), journey.waitingTime());
+        assertEquals(Duration.ofMinutes(40), journey.totalDuration());
+
+        assertEquals(LocalDateTime.of(2026, 10, 16, 8, 0), journey.departureDateTime());
+        assertEquals(LocalDateTime.of(2026, 10, 16, 8, 40), journey.arrivalDateTime());
     }
 
     @Test
