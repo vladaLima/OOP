@@ -86,5 +86,32 @@ class CardTest {
     void shouldRejectJokerWithSuit() {
         assertThrows(IllegalArgumentException.class, () -> new Card(9, Rank.JOKER, Suit.HEARTS, JokerColor.RED));
     }
+
+    @Test
+    @DisplayName("Карты с одинаковым ID должны считаться равными")
+    void shouldBeEqualWhenIdsAreSame() {
+        Card first = new Card(1, Rank.ACE, Suit.HEARTS, null);
+        Card second = new Card(1, Rank.KING, Suit.SPADES, null);
+
+        assertEquals(first, second);
+    }
+
+    @Test
+    @DisplayName("Карты с разными ID не должны считаться равными")
+    void shouldNotBeEqualWhenIdsAreDifferent() {
+        Card first = new Card(1, Rank.ACE, Suit.HEARTS, null);
+        Card second = new Card(2, Rank.ACE, Suit.HEARTS, null);
+
+        assertNotEquals(first, second);
+    }
+
+    @Test
+    @DisplayName("Равные карты должны иметь одинаковый hashCode")
+    void shouldHaveSameHashCodeWhenCardsAreEqual() {
+        Card first = new Card(1, Rank.ACE, Suit.HEARTS, null);
+        Card second = new Card(1, Rank.KING, Suit.SPADES, null);
+
+        assertEquals(first.hashCode(), second.hashCode());
+    }
 }
 

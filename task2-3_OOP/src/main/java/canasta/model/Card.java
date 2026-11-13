@@ -112,6 +112,23 @@ public class Card {
         return rank == Rank.TWO || rank == Rank.JOKER;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
 
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Card card = (Card) obj;
+        return id == card.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
 
 }
