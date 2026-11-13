@@ -9,7 +9,7 @@ class CardTest {
     @Test
     @DisplayName("Создание обычной карты и проверка её характеристик")
     void shouldCreateRegularCard() {
-        Card card = new Card(1, Suit.HEARTS, Rank.SEVEN, null);
+        Card card = new Card(1, Rank.SEVEN, Suit.HEARTS, null);
 
         assertEquals(1, card.getId());
         assertEquals(Suit.HEARTS, card.getSuit());
@@ -20,7 +20,7 @@ class CardTest {
     @Test
     @DisplayName("Создание красного джокера")
     void shouldCreateRedJoker() {
-        Card joker = new Card(2, null, Rank.JOKER, JokerColor.RED);
+        Card joker = new Card(2, Rank.JOKER, null, JokerColor.RED);
 
         assertTrue(joker.isJoker());
         assertTrue(joker.isWild());
@@ -31,7 +31,7 @@ class CardTest {
     @Test
     @DisplayName("Создание чёрного джокера")
     void shouldCreateBlackJoker() {
-        Card joker = new Card(3, null, Rank.JOKER, JokerColor.BLACK);
+        Card joker = new Card(3, Rank.JOKER, null, JokerColor.BLACK);
 
         assertTrue(joker.isJoker());
         assertEquals(JokerColor.BLACK, joker.getJokerColor());
@@ -40,7 +40,7 @@ class CardTest {
     @Test
     @DisplayName("Определение двойки как дикой карты")
     void shouldRecognizeWildCard() {
-        Card two = new Card(4, Suit.SPADES, Rank.TWO, null);
+        Card two = new Card(4, Rank.TWO, Suit.SPADES,  null);
 
         assertTrue(two.isWild());
     }
@@ -48,7 +48,7 @@ class CardTest {
     @Test
     @DisplayName("Правильное определение красной тройки")
     void shouldRecognizeRedThree() {
-        Card three = new Card(5, Suit.HEARTS, Rank.THREE, null);
+        Card three = new Card(5, Rank.THREE, Suit.HEARTS, null);
 
         assertTrue(three.isRedThree());
         assertFalse(three.isBlackThree());
@@ -57,7 +57,7 @@ class CardTest {
     @Test
     @DisplayName("Правильное определение чёрной тройки")
     void shouldRecognizeBlackThree() {
-        Card three = new Card(6, Suit.CLUBS, Rank.THREE, null);
+        Card three = new Card(6, Rank.THREE, Suit.CLUBS, null);
 
         assertTrue(three.isBlackThree());
         assertFalse(three.isRedThree());
@@ -66,25 +66,25 @@ class CardTest {
     @Test
     @DisplayName("Проверка создания карты с отрицательным ID")
     void shouldRejectNegativeId() {
-        assertThrows(IllegalArgumentException.class, () -> new Card(-1, Suit.HEARTS, Rank.SEVEN, null));
+        assertThrows(IllegalArgumentException.class, () -> new Card(-1, Rank.SEVEN, Suit.HEARTS, null));
     }
 
     @Test
     @DisplayName("Проверка создания обычной карты без масти")
     void shouldRejectRegularCardWithoutSuit() {
-        assertThrows(IllegalArgumentException.class, () -> new Card(7, null, Rank.SEVEN, null));
+        assertThrows(IllegalArgumentException.class, () -> new Card(7, Rank.SEVEN,null, null));
     }
 
     @Test
     @DisplayName("Проверка создания джокера без указания цвета")
     void shouldRejectJokerWithoutColor() {
-        assertThrows(IllegalArgumentException.class, () -> new Card(8, null, Rank.JOKER, null));
+        assertThrows(IllegalArgumentException.class, () -> new Card(8, Rank.JOKER,null, null));
     }
 
     @Test
     @DisplayName("Проверка создания джокера с мастью")
     void shouldRejectJokerWithSuit() {
-        assertThrows(IllegalArgumentException.class, () -> new Card(9, Suit.HEARTS, Rank.JOKER, JokerColor.RED));
+        assertThrows(IllegalArgumentException.class, () -> new Card(9, Rank.JOKER, Suit.HEARTS, JokerColor.RED));
     }
 }
 

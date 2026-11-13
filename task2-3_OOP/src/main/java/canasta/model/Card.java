@@ -17,7 +17,7 @@ public class Card {
      * @param suit масть карты (null для джокера)
      * @param jokerColor цвет джокера
      */
-    public Card(int id, Suit suit, Rank rank, JokerColor jokerColor) {
+    public Card(int id, Rank rank, Suit suit, JokerColor jokerColor) {
         if (id < 0) {
             throw new IllegalArgumentException("Card id cannot be negative");
         }
