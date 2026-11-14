@@ -64,25 +64,25 @@ class CardTest {
     }
 
     @Test
-    @DisplayName("Проверка создания карты с отрицательным ID")
+    @DisplayName("Проверка на запрет создания карты с отрицательным ID")
     void shouldRejectNegativeId() {
         assertThrows(IllegalArgumentException.class, () -> new Card(-1, Rank.SEVEN, Suit.HEARTS, null));
     }
 
     @Test
-    @DisplayName("Проверка создания обычной карты без масти")
+    @DisplayName("Проверка на запрет создания обычной карты без масти")
     void shouldRejectRegularCardWithoutSuit() {
         assertThrows(IllegalArgumentException.class, () -> new Card(7, Rank.SEVEN,null, null));
     }
 
     @Test
-    @DisplayName("Проверка создания джокера без указания цвета")
+    @DisplayName("Проверка на запрет создания джокера без указания цвета")
     void shouldRejectJokerWithoutColor() {
         assertThrows(IllegalArgumentException.class, () -> new Card(8, Rank.JOKER,null, null));
     }
 
     @Test
-    @DisplayName("Проверка создания джокера с мастью")
+    @DisplayName("Проверка на запрет создания джокера с мастью")
     void shouldRejectJokerWithSuit() {
         assertThrows(IllegalArgumentException.class, () -> new Card(9, Rank.JOKER, Suit.HEARTS, JokerColor.RED));
     }

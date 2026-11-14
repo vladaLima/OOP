@@ -1,5 +1,7 @@
 package canasta.model;
 
+import java.util.Objects;
+
 /**
  * Представляет одну физическую игральную карту.
  */
@@ -128,7 +130,7 @@ public class Card {
 
     @Override
     public int hashCode() {
-        return Integer.hashCode(id);
+        return Objects.hash(id);
     }
 
 }

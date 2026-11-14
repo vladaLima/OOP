@@ -54,7 +54,7 @@ public class PlayerTest {
     @Test
     @DisplayName("Нельзя удалить null из руки игрока")
     void shouldRejectNullCardWhenRemoving() {
-        Player player = new Player(1, "Alex");
+        Player player = new Player(1, "Vlada");
 
         assertThrows(IllegalArgumentException.class, () -> player.removeCard(null));
     }
@@ -69,7 +69,7 @@ public class PlayerTest {
     }
 
     @Test
-    @DisplayName("Нельзя изменить руку через getHand")
+    @DisplayName("Нельзя изменить карты в руке через getHand")
     void shouldReturnUnmodifiableHand() {
         Player player = new Player(1, "Vlada");
         Card card = new Card(1, Rank.JOKER, null, JokerColor.RED);
