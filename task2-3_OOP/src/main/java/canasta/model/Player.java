@@ -13,6 +13,8 @@ public class Player {
     /**
      * Представляет игрока в игре Канаста.
      * Игрок управляет картами в своей руке.
+     * @throws IllegalArgumentException если id отрицательный,
+     * имя игрока null или вообще пустое
      */
     public Player(int id, String name) {
         if (id < 0) {
@@ -104,6 +106,12 @@ public class Player {
         return hand.isEmpty();
     }
 
+    /**
+     * Сравнивает игроков по id.
+     *
+     * @param obj объект для сравнения
+     * @return true, если все характеристики игроков совпадают
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -118,6 +126,11 @@ public class Player {
         return id == player.id;
     }
 
+    /**
+     * Вычисляет хеш-код по характеристикам игроков, используемым в equals.
+     *
+     * @return хеш-код карты
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);

@@ -18,6 +18,8 @@ public class Card {
      * @param rank достоинство карты
      * @param suit масть карты (null для джокера)
      * @param jokerColor цвет джокера
+     * @throws IllegalArgumentException если id отрицательный,
+     * ранг null, джокер имеет масть, натуральные карты не имеют масти
      */
     public Card(int id, Rank rank, Suit suit, JokerColor jokerColor) {
         if (id < 0) {
@@ -114,6 +116,12 @@ public class Card {
         return rank == Rank.TWO || rank == Rank.JOKER;
     }
 
+    /**
+     * Сравнивает карты по id, рангу, масти, цвету джокера.
+     *
+     * @param obj объект для сравнения
+     * @return true, если все характеристики игроков совпадают
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -125,12 +133,18 @@ public class Card {
         }
 
         Card card = (Card) obj;
-        return id == card.id;
+
+        return id == card.id && rank == card.rank && suit == card.suit && jokerColor == card.jokerColor;
     }
 
+    /**
+     * Вычисляет хеш-код карты на основе её id, ранга, масти, цвета джокера.
+     *
+     * @return хеш-код карты
+     */
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, rank, suit, jokerColor);
     }
 
 }

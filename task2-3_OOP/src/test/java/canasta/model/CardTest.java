@@ -88,28 +88,28 @@ class CardTest {
     }
 
     @Test
-    @DisplayName("Карты с одинаковым ID должны считаться равными")
-    void shouldBeEqualWhenIdsAreSame() {
-        Card first = new Card(1, Rank.ACE, Suit.HEARTS, null);
-        Card second = new Card(1, Rank.KING, Suit.SPADES, null);
+    @DisplayName("Две карты с одинаковыми ID и всеми характеристиками должны считаться равными")
+    void shouldBeEqualWhenAllFieldsAreSame() {
+        Card first = new Card(1, Rank.SEVEN, Suit.HEARTS, null);
+        Card second = new Card(1, Rank.SEVEN, Suit.HEARTS, null);
 
         assertEquals(first, second);
     }
 
     @Test
-    @DisplayName("Карты с разными ID не должны считаться равными")
-    void shouldNotBeEqualWhenIdsAreDifferent() {
-        Card first = new Card(1, Rank.ACE, Suit.HEARTS, null);
-        Card second = new Card(2, Rank.ACE, Suit.HEARTS, null);
+    @DisplayName("Две карты с одинаковым ID, но разными мастями не должны считаться равными")
+    void shouldNotBeEqualWhenSuitsAreDifferent() {
+        Card first = new Card(1, Rank.SEVEN, Suit.HEARTS, null);
+        Card second = new Card(1, Rank.SEVEN, Suit.SPADES, null);
 
         assertNotEquals(first, second);
     }
 
     @Test
-    @DisplayName("Равные карты должны иметь одинаковый hashCode")
+    @DisplayName("Равные карты должны иметь одинаковый хеш-код")
     void shouldHaveSameHashCodeWhenCardsAreEqual() {
-        Card first = new Card(1, Rank.ACE, Suit.HEARTS, null);
-        Card second = new Card(1, Rank.KING, Suit.SPADES, null);
+        Card first = new Card(1, Rank.SEVEN, Suit.HEARTS, null);
+        Card second = new Card(1, Rank.SEVEN, Suit.HEARTS, null);
 
         assertEquals(first.hashCode(), second.hashCode());
     }

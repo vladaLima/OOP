@@ -15,7 +15,7 @@ public class Team {
      *
      * @param id идентификатор команды
      * @param players список из двух игроков
-     * @throws IllegalArgumentException если ID отрицательный,
+     * @throws IllegalArgumentException если id отрицательный,
      * список null, содержит не двух игроков или null
      */
     public Team(int id, List<Player> players) {
